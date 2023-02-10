@@ -5,18 +5,21 @@ mod problem;
 mod variables;
 
 fn main() {
-    println!("Hello, world!");
+    let x = variables::Variable::new("X", 0.0, 20.0);
+    let y = variables::Variable::new("Y", 0.0, 25.0);
 
-    // let vars = vec![
-    //     variables::Variable::new("X", 0.0, 20.0),
-    //     variables::Variable::new("y", 0.0, 25.0),
-    // ];
-    //
-    // let my_problem = problem::Problem::new("MyProb", vars);
-    //
-    //
+    let mut problem = problem::Problem::new("example");
+    problem.add_variable(&x);
+    problem.add_variable(&y);
 
-    let obj = objective::Objective::new();
+    println!("{:?}", problem);
 
-    println!("{:?}", obj);
+    // Problem Name: example
+    // N Variables: 2 | N Constraints 2
+    // CST NAME : 0.0 <= x <= 20.0 -> x
+    // 0.0 <= 10 * y <= 25.0 -> y
+    // 0.0 <= 10 * x + 1 * y <= 20 -> Fuse 1
+    //
+    //
+    //
 }

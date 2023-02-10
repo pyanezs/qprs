@@ -22,9 +22,13 @@ impl Variable {
     }
 
     pub fn to_constraint(&self) -> Constraint {
-        let cst_name = format!("{}_cst", self.name);
         let coeffs: HashMap<String, f64> = HashMap::from([(self.name.clone(), 1.0)]);
-        Constraint::new(&cst_name, coeffs, self.lower_bound, self.upper_bound)
+        Constraint::new(
+            &self.name.clone(),
+            coeffs,
+            self.lower_bound,
+            self.upper_bound,
+        )
     }
 }
 
@@ -44,7 +48,7 @@ mod tests {
     fn test_to_constraint() {
         let cst = Variable::new(&String::from("x"), 5.0, 10.0).to_constraint();
 
-        assert_eq!("x_cst", cst.name);
+        assert_eq!("x", cst.name);
         assert_eq!(5.0, cst.lower_bound);
         assert_eq!(10.0, cst.upper_bound);
 

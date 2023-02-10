@@ -4,7 +4,7 @@ use std::fmt;
 #[derive(Debug)]
 pub struct Constraint {
     pub name: String,
-    pub coeffs: HashMap<String, f64>,
+    pub coeffs: HashMap<Variable, f64>,
     pub lower_bound: f64,
     pub upper_bound: f64,
 }
