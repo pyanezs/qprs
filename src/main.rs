@@ -1,25 +1,32 @@
 use std::collections::HashMap;
+
+use crate::constraint::Constraint;
 mod constraint;
 mod objective;
 mod problem;
 mod variables;
 
 fn main() {
-    let x = variables::Variable::new("X", 0.0, 20.0);
-    let y = variables::Variable::new("Y", 0.0, 25.0);
-
+    // Create a problem and add variables to it
     let mut problem = problem::Problem::new("example");
-    problem.add_variable(&x);
-    problem.add_variable(&y);
 
-    println!("{:?}", problem);
+    // Add variables
+    let x = problem.add_variable("X", 0.0, 20.0);
+    let y = problem.add_variable("Y", 0.0, 25.0);
 
-    // Problem Name: example
-    // N Variables: 2 | N Constraints 2
-    // CST NAME : 0.0 <= x <= 20.0 -> x
-    // 0.0 <= 10 * y <= 25.0 -> y
-    // 0.0 <= 10 * x + 1 * y <= 20 -> Fuse 1
+    // problem.add_variable(&x);
+    // problem.add_variable(&y);
     //
+    // // TODO Add Constraints to the problem
+    // let mut coeffs: HashMap<&variables::Variable, f64> = HashMap::new();
+    // coeffs.insert(&x, 1.0);
+    // coeffs.insert(&y, 1.0);
+    // let cst = Constraint::new("Cst1", coeffs, 5.0, 15.0);
     //
-    //
+    // println!("{:?}", problem);
+    println!("{:?}", x);
+    // println!("{:?}", y);
+
+    // TODO Solve the problem
+    // TODO Evaluate solution
 }

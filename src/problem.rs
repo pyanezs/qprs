@@ -1,61 +1,61 @@
 use core::fmt;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
-use crate::{constraint::Constraint, objective::Objective, variables::Variable};
+use crate::{constraint::Constraint, variables::Variable};
 
 #[derive(Debug)]
-pub struct Problem<'a> {
+pub struct Problem {
     pub name: String,
-    variables: HashMap<String, &'a Variable>,
-    constraints: HashMap<String, Constraint>,
-    // objective: Objective,
+    variables: Vec<Variable>,
 }
 
-impl<'a> Problem<'a> {
+impl Problem {
     pub fn new(name: &str) -> Self {
         Problem {
             name: String::from(name),
-            variables: HashMap::new(),
-            constraints: HashMap::new(),
+            variables: Vec::new(),
+            // constraints: HashSet::new(),
             // objective: Objective::new(),
         }
     }
 
-    pub fn add_variable(&mut self, variable: &'a Variable) {
-        let cst = variable.to_constraint();
-        self.constraints.insert(cst.name.clone(), cst);
-        self.variables.insert(variable.name.clone(), variable);
+    pub fn add_variable(&mut self, name: &str, lower_limit: f64, upper_limit: f64) -> &Variable {
+        let var = Variable::new(name, lower_limit, upper_limit);
+        self.variables.push(var);
+        self.variables.last().unwrap()
     }
+
+    pub fn add_constraint(&mut self, constraint: Constraint) {
+        // self.constraints.insert(constraint);
+    }
+
+    // pub fn add_obj_quadratic_coeff(
+    //     &mut self,
+    //     variable_1: &'a Variable,
+    //     variable_2: &'a Variable,
+    //     coeff: f64,
+    // ) {
+    //     // TODO Implement!
+    // }
+    //
+    // // pub fn add_obj_linear_coeff(&mut self, variable: &'a Variable, coeff: f64) {
+    //     // TODO Implement!
+    // }
+    //
+    // pub fn solve(self) -> Solution {
+    //     // TODO Implement!
+    // }
+    //
+    // pub fn evaluate(self, Solution) {
+    //     // TODO Implement!
+    // }
 }
 
-impl<'a> fmt::Display for Problem<'a> {
+impl fmt::Display for Problem {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let mut report = format!(
-            "Problem Name: {}\nN Variables: {} | N Constraints {}",
-            self.name,
-            self.variables.len(),
-            self.constraints.len()
-        );
-
-        for key, value in map:
-            report += f"\n{key}: {value}"
-
-        write!(f, "{}", report)
+        write!(f, "QP Problem\n")
     }
 }
-
-// pub fn add_constraint(&mut self, constraint: Constraint) {
-//     // TODO Check that constrains has valid variables
-//     self.constraints.insert(constraint.name.clone(), constraint);
-// }
-//
-// pub fn set_quadratic_obj_coeff(&mut self, var_name_1: &str, var_name_2: &str, coeff: f64) {
-//     // TODO Check that constrains has valid variables
-//     self.objective
-//         .set_quadratic_coeff(var_name_1, var_name_2, coeff);
-// }
-//
-// pub fn set_linear_obj_coeff(&mut self, var_name, )
 
 #[cfg(test)]
 mod tests {
@@ -75,10 +75,9 @@ mod tests {
     #[test]
     fn test_add_variable() {
         let mut problem = Problem::new("my-problem");
-        let var = Variable::new("x", 10.0, 20.0);
-        problem.add_variable(&var);
-
+        assert_eq!(problem.variables.len(), 0);
+        problem.add_variable("x", 10.0, 20.0);
+        assert_eq!(problem.variables.len(), 1);
         println!("{:?}", problem.variables);
-        println!("{:?}", var);
     }
 }
