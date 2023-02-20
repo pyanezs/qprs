@@ -34,8 +34,8 @@ impl Constraint {
         }
     }
 
-    pub fn from_variable(variable: Rc<Variable>) -> Self {
-        let coeffs = HashMap::from([(Rc::clone(&variable), 1.0)]);
+    pub fn from_variable(variable: &Rc<Variable>) -> Self {
+        let coeffs = HashMap::from([(Rc::clone(variable), 1.0)]);
         Constraint {
             name: variable.name.clone(),
             coeffs,
@@ -105,7 +105,7 @@ mod tests {
     fn test_from_variable() {
         let x = Variable::new("x", 0.0, 10.0);
 
-        let cst = Constraint::from_variable(Rc::clone(&x));
+        let cst = Constraint::from_variable(&x);
         assert_eq!(cst.name, String::from("x"));
         assert_eq!(cst.lower_bound, 0.0);
         assert_eq!(cst.upper_bound, 10.0);
@@ -117,7 +117,7 @@ mod tests {
     #[test]
     fn test_hash() {
         let x = Variable::new("x", 0.0, 10.0);
-        let cst = Constraint::from_variable(Rc::clone(&x));
+        let cst = Constraint::from_variable(&x);
 
         let mut hasher = DefaultHasher::new();
         cst.hash(&mut hasher);

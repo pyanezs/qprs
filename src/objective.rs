@@ -1,29 +1,42 @@
-use std::collections::HashMap;
+use std::fmt;
+use std::rc::Rc;
+
+use crate::variables::Variable;
 
 #[derive(Debug)]
 pub struct Objective {
-    quadratic_coeffs: HashMap<(String, String), f64>,
-    linear_coeffs: HashMap<String, f64>,
+    var_1: Rc<Variable>,
+    var_2: Option<Rc<Variable>>,
+    coeff: f64,
 }
 
 impl Objective {
-    pub fn new() -> Self {
+    pub fn quadratic(var1: &Rc<Variable>, var2: &Rc<Variable>, coeff: f64) -> Self {
+        let mut vars = vec![Rc::clone(var1), Rc::clone(var2)];
+        vars.sort_by_key(|variable| (variable.name.clone()));
+
         Objective {
-            quadratic_coeffs: HashMap::new(),
-            linear_coeffs: HashMap::new(),
+            var_1: Rc::clone(&vars[0]),
+            var_2: Some(Rc::clone(&vars[1])),
+            coeff,
         }
     }
 
-    pub fn set_linear_coeff(&mut self, var_name: &str, coeff: f64) {
-        self.linear_coeffs.insert(String::from(var_name), coeff);
+    pub fn linear(variable: &Rc<Variable>, coeff: f64) -> Self {
+        Objective {
+            var_1: Rc::clone(variable),
+            var_2: None,
+            coeff,
+        }
     }
+}
 
-    pub fn set_quadratic_coeff(&mut self, var_name_1: &str, var_name_2: &str, coeff: f64) {
-        // NOTE: I think this could be prettier
-        let mut vars = vec![var_name_1, var_name_2];
-        vars.sort();
-        let vars = (String::from(vars[0]), String::from(vars[1]));
-        self.quadratic_coeffs.insert(vars, coeff);
+impl fmt::Display for Objective {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match &self.var_2 {
+            Some(x) => write!(f, "{} * {} * {}", self.coeff, self.var_1.name, x.name),
+            None => write!(f, "{} * {}", self.coeff, self.var_1.name),
+        }
     }
 }
 
@@ -32,36 +45,44 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_new() {
-        let objective = Objective::new();
-        let linear_coeffs: HashMap<String, f64> = HashMap::new();
-        let quadratic_coeffs: HashMap<(String, String), f64> = HashMap::new();
-        assert_eq!(objective.linear_coeffs, linear_coeffs);
-        assert_eq!(objective.quadratic_coeffs, quadratic_coeffs);
+    fn test_quadratic_coeff() {
+        let x = Variable::new("x", 1.0, 2.0);
+        let obj = Objective::quadratic(&x, &x, 10.0);
+
+        assert_eq!(obj.var_1, x);
+        assert_eq!(obj.var_2, Some(x));
+        assert_eq!(obj.coeff, 10.0);
+    }
+
+    #[test]
+    fn test_quadratic_coeff_mixed_1() {
+        let x = Variable::new("x", 1.0, 2.0);
+        let y = Variable::new("y", 1.0, 2.0);
+        let obj = Objective::quadratic(&x, &y, 10.0);
+
+        assert_eq!(obj.var_1, x);
+        assert_eq!(obj.var_2, Some(y));
+        assert_eq!(obj.coeff, 10.0);
+    }
+
+    #[test]
+    fn test_quadratic_coeff_mixed_2() {
+        let x = Variable::new("x", 1.0, 2.0);
+        let y = Variable::new("y", 1.0, 2.0);
+        let obj = Objective::quadratic(&y, &x, 14.0);
+
+        assert_eq!(obj.var_1, x);
+        assert_eq!(obj.var_2, Some(y));
+        assert_eq!(obj.coeff, 14.0);
     }
 
     #[test]
     fn test_linear_coeff() {
-        let mut objective = Objective::new();
-        objective.set_linear_coeff("x", 10.0);
+        let x = Variable::new("x", 1.0, 2.0);
+        let obj = Objective::linear(&x, 10.0);
 
-        let mut linear_coeffs: HashMap<String, f64> = HashMap::new();
-        linear_coeffs.insert(String::from("x"), 10.0);
-
-        assert_eq!(objective.linear_coeffs, linear_coeffs);
-    }
-
-    #[test]
-    fn test_quadratic_coeff() {
-        let mut objective = Objective::new();
-        objective.set_quadratic_coeff("b", "a", 10.0);
-
-        let coeffs: HashMap<(String, String), f64> =
-            HashMap::from([((String::from("a"), String::from("b")), 10.0)]);
-        assert_eq!(objective.quadratic_coeffs, coeffs);
-
-        let coeffs: HashMap<(String, String), f64> =
-            HashMap::from([((String::from("b"), String::from("a")), 10.0)]);
-        assert_ne!(objective.quadratic_coeffs, coeffs);
+        assert_eq!(obj.var_1, x);
+        assert_eq!(obj.var_2, None);
+        assert_eq!(obj.coeff, 10.0);
     }
 }

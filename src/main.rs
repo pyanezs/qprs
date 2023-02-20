@@ -1,32 +1,35 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, rc::Rc};
 
-use crate::constraint::Constraint;
+use crate::{constraint::Constraint, objective::Objective, variables::Variable};
+
 mod constraint;
 mod objective;
 mod problem;
 mod variables;
 
 fn main() {
-    // Create a problem and add variables to it
+    // Create a problem
     let mut problem = problem::Problem::new("example");
 
     // Add variables
-    let x = problem.add_variable("X", 0.0, 20.0);
-    let y = problem.add_variable("Y", 0.0, 25.0);
+    let x = Variable::new("x", 0.0, 20.0);
+    let y = Variable::new("y", 0.0, 20.0);
+    problem.add_variable(&x);
+    problem.add_variable(&y);
 
-    // problem.add_variable(&x);
-    // problem.add_variable(&y);
-    //
-    // // TODO Add Constraints to the problem
-    // let mut coeffs: HashMap<&variables::Variable, f64> = HashMap::new();
-    // coeffs.insert(&x, 1.0);
-    // coeffs.insert(&y, 1.0);
-    // let cst = Constraint::new("Cst1", coeffs, 5.0, 15.0);
-    //
-    // println!("{:?}", problem);
-    println!("{:?}", x);
-    // println!("{:?}", y);
+    // Add Constraints to the problem
+    let coeffs = HashMap::from([(Rc::clone(&x), 1.0), (Rc::clone(&y), 2.0)]);
+    let cst_1 = Constraint::new("Cst1", coeffs, 0.0, 25.0);
+    problem.add_constraint(cst_1);
 
-    // TODO Solve the problem
-    // TODO Evaluate solution
+    // objective
+    let obj1 = Objective::linear(&x, 1.0);
+    let obj2 = Objective::linear(&y, 1.0);
+    let obj3 = Objective::quadratic(&x, &x, 1.0);
+    let obj4 = Objective::quadratic(&x, &x, 1.0);
+
+    println!("{}", obj1);
+    println!("{}", obj2);
+    println!("{}", obj3);
+    println!("{}", obj4);
 }

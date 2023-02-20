@@ -3,6 +3,7 @@ use std::collections::HashSet;
 use std::rc::Rc;
 
 use crate::constraint::Constraint;
+// use crate::objective::Objective;
 use crate::variables::Variable;
 
 #[derive(Debug)]
@@ -10,6 +11,7 @@ pub struct Problem {
     pub name: String,
     variables: HashSet<Rc<Variable>>,
     constraints: HashSet<Constraint>,
+    // objective: Objective,
 }
 
 impl Problem {
@@ -24,6 +26,8 @@ impl Problem {
 
     pub fn add_variable(&mut self, variable: &Rc<Variable>) {
         self.variables.insert(Rc::clone(variable));
+        let constraint = Constraint::from_variable(&variable);
+        self.add_constraint(constraint);
     }
 
     pub fn add_constraint(&mut self, constraint: Constraint) {
