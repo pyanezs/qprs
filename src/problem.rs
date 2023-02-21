@@ -10,6 +10,7 @@ use crate::variables::Variable;
 pub struct Problem {
     pub name: String,
     variables: HashSet<Rc<Variable>>,
+    var_constraints: HashSet<Constraint>,
     constraints: HashSet<Constraint>,
     objectives: HashSet<Objective>,
 }
@@ -19,6 +20,7 @@ impl Problem {
         Problem {
             name: String::from(name),
             variables: HashSet::new(),
+            var_constraints: HashSet::new(),
             constraints: HashSet::new(),
             objectives: HashSet::new(),
         }
@@ -27,7 +29,7 @@ impl Problem {
     pub fn add_variable(&mut self, variable: &Rc<Variable>) {
         self.variables.insert(Rc::clone(variable));
         let constraint = Constraint::from_variable(&variable);
-        self.add_constraint(constraint);
+        self.var_constraints.insert(constraint);
     }
 
     pub fn add_constraint(&mut self, constraint: Constraint) {
@@ -38,19 +40,6 @@ impl Problem {
         self.objectives.insert(objective);
     }
 
-    // pub fn add_obj_quadratic_coeff(
-    //     &mut self,
-    //     variable_1: &'a Variable,
-    //     variable_2: &'a Variable,
-    //     coeff: f64,
-    // ) {
-    //     // TODO Implement!
-    // }
-    //
-    // // pub fn add_obj_linear_coeff(&mut self, variable: &'a Variable, coeff: f64) {
-    //     // TODO Implement!
-    // }
-    //
     // pub fn solve(self) -> Solution {
     //     // TODO Implement!
     // }
@@ -62,7 +51,29 @@ impl Problem {
 
 impl fmt::Display for Problem {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "QP Problem\n")
+        let mut text = String::from("QP Problem\n");
+
+        // TODO Add objective
+        text.push_str("Objective:\n");
+        let obj: Vec<String> = self
+            .objectives
+            .iter()
+            .map(|obj| format!("{}", obj))
+            .collect();
+        text.push_str(&format!("{}\n", obj.join(" + ")));
+
+        text.push_str("Constraints:\n");
+        for constraint in &self.constraints {
+            let cst = format!("{}\n", constraint);
+            text.push_str(&cst);
+        }
+
+        for constraint in &self.var_constraints {
+            let cst = format!("{}\n", constraint);
+            text.push_str(&cst);
+        }
+
+        write!(f, "{}", text)
     }
 }
 

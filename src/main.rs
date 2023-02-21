@@ -26,11 +26,11 @@ fn main() {
     let obj1 = Objective::linear(&x, 1.0);
     let obj2 = Objective::linear(&y, 1.0);
     let obj3 = Objective::quadratic(&x, &x, 1.0);
-    let obj4 = Objective::quadratic(&x, &x, 1.0);
+    let obj4 = Objective::quadratic(&y, &y, 1.0);
     problem.add_objective(obj1);
     problem.add_objective(obj2);
     problem.add_objective(obj3);
     problem.add_objective(obj4);
 
-    println!("{:?}", problem);
+    println!("{}", problem);
 }
