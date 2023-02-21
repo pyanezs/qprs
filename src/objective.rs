@@ -6,9 +6,9 @@ use crate::variables::Variable;
 
 #[derive(Debug)]
 pub struct Objective {
-    variable_1: Rc<Variable>,
-    variable_2: Option<Rc<Variable>>,
-    coeff: f64,
+    pub variable_1: Rc<Variable>,
+    pub variable_2: Option<Rc<Variable>>,
+    pub coeff: f64,
 }
 
 impl Objective {
