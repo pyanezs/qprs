@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use std::rc::Rc;
 
 use crate::constraint::Constraint;
-// use crate::objective::Objective;
+use crate::objective::Objective;
 use crate::variables::Variable;
 
 #[derive(Debug)]
@@ -11,7 +11,7 @@ pub struct Problem {
     pub name: String,
     variables: HashSet<Rc<Variable>>,
     constraints: HashSet<Constraint>,
-    // objective: Objective,
+    objectives: HashSet<Objective>,
 }
 
 impl Problem {
@@ -20,7 +20,7 @@ impl Problem {
             name: String::from(name),
             variables: HashSet::new(),
             constraints: HashSet::new(),
-            // objective: Objective::new(),
+            objectives: HashSet::new(),
         }
     }
 
@@ -32,6 +32,10 @@ impl Problem {
 
     pub fn add_constraint(&mut self, constraint: Constraint) {
         self.constraints.insert(constraint);
+    }
+
+    pub fn add_objective(&mut self, objective: Objective) {
+        self.objectives.insert(objective);
     }
 
     // pub fn add_obj_quadratic_coeff(
