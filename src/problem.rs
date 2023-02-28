@@ -36,7 +36,7 @@ impl QPP {
         // TODO Check that each variable is inserted only once!
         let idx = self.variables.len();
         self.variables.insert(Rc::clone(variable), idx);
-        let constraint = Constraint::from_variable(&variable);
+        let constraint = Constraint::from_variable(variable);
         self.add_constraint(constraint);
     }
 
@@ -78,7 +78,7 @@ impl QPP {
                         obj_quad[[var_1_idx, var_1_idx]] = obj.coeff;
                     } else {
                         // Mixed element -> x * y
-                        let var_2_idx = self.get_variable_idx(&x);
+                        let var_2_idx = self.get_variable_idx(x);
                         obj_quad[[var_1_idx, var_2_idx]] = obj.coeff / 2.0;
                         obj_quad[[var_2_idx, var_1_idx]] = obj.coeff / 2.0;
                     }
@@ -112,7 +112,7 @@ impl QPP {
         (constraint_coeffs, lower_bound, upper_bound)
     }
     fn get_variable_idx(&self, variable: &Rc<Variable>) -> usize {
-        self.variables.get(variable).unwrap().clone()
+        *self.variables.get(variable).unwrap()
     }
 
     pub fn solve(&self) -> HashMap<String, f64> {
@@ -143,12 +143,10 @@ impl QPP {
         let result = prob.solve().x().expect("Failed to solve problem");
 
         // Build return value
-        let mut result_map: HashMap<String, f64> = HashMap::new();
-        for (var, idx) in &self.variables {
-            result_map.insert(var.name.clone(), result[*idx]);
-        }
-
-        return result_map;
+        self.variables
+            .iter()
+            .map(|(var, idx)| (var.name.clone(), result[*idx]))
+            .collect()
     }
 }
 

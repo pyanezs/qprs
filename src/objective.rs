@@ -63,7 +63,7 @@ impl PartialEq for Objective {
         // knowledge (and the will) to make it better
         match (&self.variable_2, &other.variable_2) {
             (None, None) => self.variable_1 == other.variable_1,
-            (Some(x), Some(y)) => (&self.variable_1 == &other.variable_1) && (x == y),
+            (Some(x), Some(y)) => (self.variable_1 == other.variable_1) && (x == y),
             _ => false,
         }
     }
