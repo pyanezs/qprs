@@ -3,12 +3,12 @@ use std::{collections::HashMap, rc::Rc};
 extern crate qp_model;
 use qp_model::constraint::Constraint;
 use qp_model::objective::Objective;
-use qp_model::problem::QPProblem;
+use qp_model::problem::QPP;
 use qp_model::variable::Variable;
 
 fn main() {
     // Create a problem
-    let mut problem = QPProblem::new("example");
+    let mut problem = QPP::new("example");
 
     // Add variables
     let x = Variable::new("x", 0.0, 0.7);

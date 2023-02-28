@@ -15,16 +15,16 @@ use std::collections::HashSet;
 use std::rc::Rc;
 
 #[derive(Debug)]
-pub struct QPProblem {
+pub struct QPP {
     pub name: String,
     variables: HashMap<Rc<Variable>, usize>,
     constraints: HashSet<Constraint>,
     objectives: HashSet<Objective>,
 }
 
-impl QPProblem {
+impl QPP {
     pub fn new(name: &str) -> Self {
-        QPProblem {
+        QPP {
             name: String::from(name),
             variables: HashMap::new(),
             constraints: HashSet::new(),
@@ -152,7 +152,7 @@ impl QPProblem {
     }
 }
 
-impl fmt::Display for QPProblem {
+impl fmt::Display for QPP {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut text = String::from("QP Problem\n----------\n");
 
