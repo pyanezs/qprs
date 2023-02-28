@@ -2,7 +2,7 @@ use std::fmt;
 use std::hash::{Hash, Hasher};
 use std::rc::Rc;
 
-use crate::variables::Variable;
+use crate::variable::Variable;
 
 #[derive(Debug)]
 pub struct Objective {

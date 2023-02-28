@@ -4,7 +4,7 @@ use std::{
     rc::Rc,
 };
 
-use crate::variables::Variable;
+use crate::variable::Variable;
 use std::fmt;
 
 #[derive(Debug)]

@@ -4,4 +4,4 @@ pub mod problem;
 pub mod solution;
 pub mod standard_form;
 mod utils;
-pub mod variables;
+pub mod variable;

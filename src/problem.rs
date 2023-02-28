@@ -2,7 +2,7 @@ use crate::constraint::Constraint;
 use crate::objective::Objective;
 use crate::standard_form::StandardForm;
 use crate::utils::array2_to_vec;
-use crate::variables::Variable;
+use crate::variable::Variable;
 use osqp::CscMatrix;
 use osqp::Problem;
 use osqp::Settings;

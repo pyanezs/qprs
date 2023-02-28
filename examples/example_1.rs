@@ -4,7 +4,7 @@ extern crate qp_model;
 use qp_model::constraint::Constraint;
 use qp_model::objective::Objective;
 use qp_model::problem::QPProblem;
-use qp_model::variables::Variable;
+use qp_model::variable::Variable;
 
 fn main() {
     // Create a problem
