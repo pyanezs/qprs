@@ -1,16 +1,10 @@
 use std::{collections::HashMap, rc::Rc};
 
-use crate::{
-    constraint::Constraint, objective::Objective, problem::QPProblem, variables::Variable,
-};
-
-mod constraint;
-mod objective;
-mod problem;
-mod solution;
-mod standard_form;
-mod utils;
-mod variables;
+extern crate qp_model;
+use qp_model::constraint::Constraint;
+use qp_model::objective::Objective;
+use qp_model::problem::QPProblem;
+use qp_model::variables::Variable;
 
 fn main() {
     // Create a problem

@@ -12,7 +12,6 @@ fn main() {
 
     // Extract the upper triangular elements of `P`
     let P = CscMatrix::from(P).into_upper_tri();
-    println!("{:?}", P);
 
     // Disable verbose output
     let settings = Settings::default().verbose(false);
